@@ -25,7 +25,11 @@ $(document).ready(function(){
             }
 
             if(commande.match(/^version$/gi) != null){
-                version(commande);
+                version();
+            }
+
+            if(commande.match(/^free$/gi) != null){
+                free();
             }
             
             $("#input").val('');
@@ -70,10 +74,25 @@ $(document).ready(function(){
             data: {"version": "true"},
             success: function(data, statut){
                 display(data.key);
-                console.log(data.key)
             },
             error: function(data, statut, error){
                 console.log(error);
+            }
+        });
+    }
+
+    function free(){
+        $.ajax({
+            url: 'script.php',
+            type: 'GET',
+            dataType: 'json',
+            data: {'free' : 'true'},
+            success: function(data, statut){
+                var espacedispo = data.key + ' GB';
+                display(espacedispo);
+            },
+            error: function(data, statut, error){
+                console.log(data);
             }
         });
     }
