@@ -23,6 +23,10 @@ $(document).ready(function(){
             if(commande.match(/^date$/gi) != null){
                 date(commande);
             }
+
+            if(commande.match(/^version$/gi) != null){
+                version(commande);
+            }
             
             $("#input").val('');
         }
@@ -43,7 +47,7 @@ $(document).ready(function(){
         return result;
     }
 
-    function date(commande){
+    function date(){
         $.ajax({
             url: 'script.php',               
             type: 'GET',
@@ -55,6 +59,22 @@ $(document).ready(function(){
             error: function(data, statut, error){
                 alert(error);
             }
-    });
+        });
+    }
+
+    function version(){
+        $.ajax({
+            url: 'script.php',               
+            type: 'GET',
+            dataType: 'json',
+            data: {"version": "true"},
+            success: function(data, statut){
+                display(data.key);
+                console.log(data.key)
+            },
+            error: function(data, statut, error){
+                console.log(error);
+            }
+        });
     }
 });
