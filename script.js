@@ -1,10 +1,12 @@
 $(document).ready(function(){
     $("#input").keypress(function(e) {
-        if(e.which == 13) {
+        /*identifiant de la touche entrer*/
+        if(e.which == 13) { 
+            /*recuperer la valeur dans linput*/
             var commande = $("#input").val();
-
+            
             console.log('commande : ', commande); 
-            display(commande);
+            display(commande); /*affiche la methode commande*/
 
             if(commande.match(/[=]/gi) != null){
                 var result = calcul(commande);
@@ -24,7 +26,7 @@ $(document).ready(function(){
         }
     });
 
-    function display(result){
+    function display(result){ /*afficher sur lecran le resultat*/
         $("#screen").append('<div> > '+result+' </div>');
     }
 
