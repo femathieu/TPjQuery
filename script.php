@@ -1,5 +1,16 @@
 <?php
 $currentFolder = getcwd();
+
+$commandes = array();
+
+if(isset($_POST['commande']) && $_POST['commande'] != ''){
+    foreach($_POST['commande'] as $commande){
+        $commandes[] = $commande;
+    }
+    header("HTTP1/1 200");
+    echo json_encode(array("key" => $commandes));
+}
+
 if(isset($_GET['date']) && $_GET['date'] == "true"){
     $date = new DateTime('now');
     header("HTTP1/1 200");
@@ -52,4 +63,15 @@ if(isset($_POST['rmdir']) && $_POST['rmdir'] == 'true'){
 if(isset($_POST['vi']) && $_POST['vi'] == 'true'){
     header("HTTP1/1 200");
     echo json_encode(array("key" => file_get_contents($currentFolder.'/'.$_POST['file'])));
+}
+
+if(isset($_POST['history']) && $_POST['history'] == true){
+    header("HTTP1/1 200");
+    echo json_encode(array("key" => $commandes));
+}
+
+if(isset($_POST['reset']) && $_POST['reset'] == true){
+    $commandes = array();
+    header("hTTP1/1 200");
+    echo json_encode(array("key" => "nice"));
 }

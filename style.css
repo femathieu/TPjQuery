@@ -3,6 +3,8 @@
     height: 30em;
     background: black;
     color: white;
+    overflow: auto;
+    padding: 1em;
 }
 
 #input{
