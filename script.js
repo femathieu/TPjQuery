@@ -37,7 +37,11 @@ $(document).ready(function(){
             }
 
             if(commande.match(/^cd dossier$/gi) != null){
-                cd();
+                cd(commande);
+            }
+
+            if(commande.match(/^cd/gi) != null){
+                cd(commande);
             }
 
             if(commande.match(/^ls$/gi) != null){
@@ -162,12 +166,19 @@ $(document).ready(function(){
         });
     }
 
-    function cd(){
+    function cd(commande){
+        path = '';
+        for(var i = 2 ; i < commande.length ; i++){
+            if(commande[i] != ' '){
+                path = path + commande[i];
+            }
+        }
+
         $.ajax({
             url: 'script.php',
             type: 'POST',
             dataType: 'json',
-            data: {'cd' : 'true'},
+            data: {'cd' : 'true', 'path': path},
             success: function(data, statut){
                 display(data.key);
             },
@@ -205,7 +216,7 @@ $(document).ready(function(){
             url: 'script.php',
             type: 'POST',
             dataType: 'json',
-            data: {'mkdir': 'true', 'path': path},
+            data: {'mkdir': 'true', 'foldername': path},
             success: function(data, statut){
                 if(data.key){
                     display('dossier : '+path+' créé');

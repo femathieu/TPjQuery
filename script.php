@@ -1,5 +1,8 @@
 <?php
-$currentFolder = getcwd();
+session_start();
+if(!isset($_SESSION['currentFolder'])){
+    $_SESSION['currentFolder'] = getcwd();
+}
 
 $commandes = array();
 
@@ -29,8 +32,13 @@ if(isset($_GET['free']) && $_GET['free'] == "true"){
 }
 
 if(isset($_POST['cd']) && $_POST['cd'] == "true"){
+    if(is_dir($_POST['path'])){
+        $_SESSION['currentFolder'] = getcwd().'/'.$_POST['path'];
+    }else{
+        $_SESSION['currentFolder'] = 'no such file directory';
+    }
     header("HTTP1/1 200");
-    echo json_encode(array("key" => $currentFolder));
+    echo json_encode(array("key" => $_SESSION['currentFolder']));
 }
 
 if(isset($_POST['ls']) && $_POST['ls'] == "true"){
@@ -52,7 +60,7 @@ if(isset($_POST['ls']) && $_POST['ls'] == "true"){
 
 if(isset($_POST['mkdir']) && $_POST['mkdir'] == 'true'){
     header("HTTP1/1 200");
-    echo json_encode(array("key" => mkdir($_POST['path'], true)));
+    echo json_encode(array("key" => mkdir($_SESSION['currentFolder'].'/'.$_POST['foldername'], 0700, true)));
 }
 
 if(isset($_POST['rmdir']) && $_POST['rmdir'] == 'true'){
