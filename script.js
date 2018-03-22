@@ -6,10 +6,16 @@ $(document).ready(function(){
             console.log('commande : ', commande); 
             display(commande);
 
-            if(commande.match(/[=]/gi).length ==1){
+            if(commande.match(/[=]/gi) != null){
                 var result = calcul(commande);
                 display(result);
             }
+            if(commande.match(/[clear]/gi) != null){
+                $('#screen').children().remove();
+            }
+            
+            console.log('test')
+            $("#input").val('');
         }
     });
 
