@@ -31,6 +31,18 @@ $(document).ready(function(){
             if(commande.match(/^free$/gi) != null){
                 free();
             }
+
+            if(commande.match(/^cd dossier$/gi) != null){
+                cd();
+            }
+
+            if(commande.match(/^ls$/gi) != null){
+                ls();
+            }
+
+            if(commande.match(/^mkdir/gi) != null){
+                mkdir(commande);
+            }
             
             $("#input").val('');
         }
@@ -43,9 +55,7 @@ $(document).ready(function(){
     function calcul(commande){
         var calcul = '';
         for(var i = 1 ; i < commande.length ; i++) {
-            if(calcul != undefined){
-                calcul = calcul + commande[i];
-            }
+            calcul = calcul + commande[i];
         }
         var result = eval(calcul);
         return result;
@@ -95,5 +105,58 @@ $(document).ready(function(){
                 console.log(data);
             }
         });
+    }
+
+    function cd(){
+        $.ajax({
+            url: 'script.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {'cd' : 'true'},
+            success: function(data, statut){
+                display(data.key);
+            },
+            error: function(data, statut, error){
+                console.log(data);
+            }
+        });
+    }
+
+    function ls(){
+        $.ajax({
+            url: 'script.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {'ls' : 'true'},
+            success: function(data, statut){
+                for(var i = 0 ; i < data.key.files.length ; i++){
+                    display(data.key.files[i]+' ('+data.key.is_dir[i]+')');
+                }
+            },
+            error: function(data, statut, error){
+                console.log(data);
+            }
+        });
+    }
+
+    function mkdir(commande){
+        var path = '';
+        for(var i = 5 ; i < commande.length ; i++) {
+            path = path + commande[i];
+        }
+        $.ajax({
+            url: 'script.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {'mkdir': 'true', 'path': path},
+            success: function(data, statut){
+                if(data.key){
+                    display('dossier : '+path+' créé');
+                }
+            },
+            error: function(data, statut, error){
+                console.log(data);
+            }
+        })
     }
 });
