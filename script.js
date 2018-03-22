@@ -14,7 +14,6 @@ $(document).ready(function(){
                 $('#screen').children().remove();
             }
             
-            console.log('test')
             $("#input").val('');
         }
     });
@@ -24,16 +23,13 @@ $(document).ready(function(){
     }
 
     function calcul(commande){
-        var result;
-        var calcul;
+        var calcul = '';
         for(var i = 1 ; i < commande.length ; i++) {
             if(calcul != undefined){
                 calcul = calcul + commande[i];
-            }else{
-                calcul = commande[i];
             }
         }
-        result = eval(calcul);
+        var result = eval(calcul);
         return result;
     }
 });
