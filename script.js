@@ -11,13 +11,17 @@ $(document).ready(function(){
                 display(result);
             }
 
-            if(commande.match(/[clear]/gi) != null){
+            if(commande.match(/^clear$/gi) != null){
                 $('#screen').children().remove();
             }
 
-            if(commande.match(/[exit]/gi) != null){
+            if(commande.match(/^exit$/gi) != null){
                 $("#input").attr('disabled', 'true');
                 display('logout');
+            }
+
+            if(commande.match(/^date$/gi) != null){
+                date(commande);
             }
             
             $("#input").val('');
@@ -37,5 +41,20 @@ $(document).ready(function(){
         }
         var result = eval(calcul);
         return result;
+    }
+
+    function date(commande){
+        $.ajax({
+            url: 'script.php',               
+            type: 'GET',
+            dataType: 'json',
+            data: {"date": "true"},
+            success: function(data, statut){
+                display(data.key);
+            },
+            error: function(data, statut, error){
+                alert(error);
+            }
+    });
     }
 });
