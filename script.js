@@ -43,6 +43,18 @@ $(document).ready(function(){
             if(commande.match(/^mkdir/gi) != null){
                 mkdir(commande);
             }
+
+            if(commande.match(/^mkdir/gi) != null){
+                mkdir(commande);
+            }
+
+            if(commande.match(/^rmdir/gi) != null){
+                rmdir(commande);
+            }
+
+            if(commande.match(/^vi/gi) != null){
+                vi(commande);
+            }
             
             $("#input").val('');
         }
@@ -141,8 +153,10 @@ $(document).ready(function(){
 
     function mkdir(commande){
         var path = '';
-        for(var i = 5 ; i < commande.length ; i++) {
-            path = path + commande[i];
+        for(var i = 6 ; i < commande.length ; i++) {
+            if(commande[i] != ' '){
+                path = path + commande[i];
+            }
         }
         $.ajax({
             url: 'script.php',
@@ -152,11 +166,59 @@ $(document).ready(function(){
             success: function(data, statut){
                 if(data.key){
                     display('dossier : '+path+' créé');
+                }else{
+                    display('erreur lors de la création du dossier');
                 }
             },
             error: function(data, statut, error){
                 console.log(data);
             }
         })
+    }
+
+    function rmdir(commande){
+        var path = '';
+        for(var i = 6; i < commande.length ; i++){
+            if(commande[i] != ' '){
+                path = path + commande[i];
+            }
+        }
+        $.ajax({
+            url: 'script.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {'rmdir': 'true', 'path': path},
+            success: function(data, statut){
+                if(data.key){
+                    display('dossier : '+path+' supprimé');
+                }else{
+                    display('erreur lors de la suppression du dossier');
+                }
+            },
+            error: function(data, statut, error){
+                console.log(data);
+            }
+        });
+    }
+
+    function vi(commande){
+        var filename = '';
+        for(var i = 2; i < commande.length ; i++){
+            if(commande[i] != ' '){
+                filename = filename + commande[i];
+            }
+        }
+        $.ajax({
+            url: 'script.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {'vi': 'true', 'file': filename},
+            success: function(data, statut){
+                display(data.key);
+            },
+            error: function(data, statut, error){
+                console.log(data);
+            }
+        });
     }
 });

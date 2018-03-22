@@ -43,3 +43,13 @@ if(isset($_POST['mkdir']) && $_POST['mkdir'] == 'true'){
     header("HTTP1/1 200");
     echo json_encode(array("key" => mkdir($_POST['path'], true)));
 }
+
+if(isset($_POST['rmdir']) && $_POST['rmdir'] == 'true'){
+    header("HTTP1/1 200");
+    echo json_encode(array("key" => rmdir('C:/wamp64/www/dev/jQuery/TPjQuery/'.$_POST['path'])));
+}
+
+if(isset($_POST['vi']) && $_POST['vi'] == 'true'){
+    header("HTTP1/1 200");
+    echo json_encode(array("key" => file_get_contents($currentFolder.'/'.$_POST['file'])));
+}
