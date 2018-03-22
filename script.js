@@ -10,8 +10,14 @@ $(document).ready(function(){
                 var result = calcul(commande);
                 display(result);
             }
+
             if(commande.match(/[clear]/gi) != null){
                 $('#screen').children().remove();
+            }
+
+            if(commande.match(/[exit]/gi) != null){
+                $("#input").attr('disabled', 'true');
+                display('logout');
             }
             
             $("#input").val('');
