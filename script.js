@@ -7,8 +7,8 @@ $(document).ready(function(){
 
             memorizeCommande(commande);
 
-            console.log('commande : ', commande); 
-            display(commande);
+            console.log('commande : ', commande);
+            $('#screen').append('<div style=\'color: red;\'>'+commande+'</div>');
 
             if(commande.match(/[=]/gi) != null){
                 var result = calcul(commande);
@@ -22,6 +22,17 @@ $(document).ready(function(){
             if(commande.match(/^exit$/gi) != null){
                 $("#input").attr('disabled', 'true');
                 display('logout');
+                    $.ajax({
+                        url: 'script.php',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {'logout' : 'true'},
+                        success: function(data, statut){
+                        },
+                        error: function(data, statut, error){
+                            console.log(data);
+                        }
+                    });
             }
 
             if(commande.match(/^date$/gi) != null){
@@ -46,10 +57,6 @@ $(document).ready(function(){
 
             if(commande.match(/^ls$/gi) != null){
                 ls();
-            }
-
-            if(commande.match(/^mkdir/gi) != null){
-                mkdir(commande);
             }
 
             if(commande.match(/^mkdir/gi) != null){
@@ -82,14 +89,17 @@ $(document).ready(function(){
 
     function memorizeCommande(commande, display = false){
         if(commande != ''){
-            listCommandes.push(commande);
+            if(!display){
+                listCommandes.push(commande);
+            }
             $.ajax({
                 url: 'script.php',               
                 type: 'POST',
                 dataType: 'json',
                 data: {"commande": listCommandes},
                 success: function(data, statut){
-                    console.log(data.key);
+                    console.log('commandes : ',data.key);
+                    console.log('currentfolder :', data.current)
                     if(display){
                         for(var i = 0 ; i < data.key.length ; i++){
                             $("#screen").append('<div> > '+data.key[i]+' </div>');
@@ -104,7 +114,7 @@ $(document).ready(function(){
     }
 
     function display(result){
-        $("#screen").append('<div> > '+result+' </div>');
+        $("#screen").append('<div style=\'margin-left: 2em;\'> > '+result+' </div>');
     }
 
     function calcul(commande){
@@ -180,7 +190,12 @@ $(document).ready(function(){
             dataType: 'json',
             data: {'cd' : 'true', 'path': path},
             success: function(data, statut){
-                display(data.key);
+                console.log('back',data.back)
+                if(data.cd){
+                    display(data.key);
+                }else{
+                    display('no such file directory');
+                }
             },
             error: function(data, statut, error){
                 console.log(data);
@@ -221,7 +236,7 @@ $(document).ready(function(){
                 if(data.key){
                     display('dossier : '+path+' créé');
                 }else{
-                    display('erreur lors de la création du dossier');
+                    display('le dossier spécifié existe déjà');
                 }
             },
             error: function(data, statut, error){
@@ -246,7 +261,7 @@ $(document).ready(function(){
                 if(data.key){
                     display('dossier : '+path+' supprimé');
                 }else{
-                    display('erreur lors de la suppression du dossier');
+                    display('le dossier n\'existe pas');
                 }
             },
             error: function(data, statut, error){
@@ -271,6 +286,7 @@ $(document).ready(function(){
                 display(data.key);
             },
             error: function(data, statut, error){
+                display('no such file');
                 console.log(data);
             }
         });
@@ -293,6 +309,7 @@ $(document).ready(function(){
     }
 
     function reset(){
+        listCommandes = [];
         clear();
         $.ajax({
             url: 'script.php',
@@ -327,6 +344,7 @@ $(document).ready(function(){
         {"nomCommande" : "rmdir [nom_dossier]", "action" : "efface un dossier"},
         {"nomCommande" : "vi [nom_fichier]", "action" : "affiche un fichier"},
         {"nomCommande" : "history", "action" : "affiche l'historique des commandes"},
+        {"nomCommande" : "reset", "action" : "supprime l'historique de commandes et clear l'invite de commande"},
         {"nomCommande" : "man", "action" : "affiche toutes les commandes disponibles"}
     ]
 });
