@@ -115,6 +115,7 @@ $(document).ready(function(){
 
     function display(result){
         $("#screen").append('<div style=\'margin-left: 2em;\'> > '+result+' </div>');
+        $("#screen").scrollTop($('#screen')[0].scrollHeight);
     }
 
     function calcul(commande){
