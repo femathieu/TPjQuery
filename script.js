@@ -8,7 +8,7 @@ $(document).ready(function(){
             memorizeCommande(commande);
 
             console.log('commande : ', commande);
-            $('#screen').append('<div style=\'color: red;\'>'+commande+'</div>');
+            $('#display').append('<div style=\'color: red;\'>'+commande+'</div>');
 
             if(commande.match(/[=]/gi) != null){
                 var result = calcul(commande);
@@ -114,8 +114,8 @@ $(document).ready(function(){
     }
 
     function display(result){
-        $("#screen").append('<div style=\'margin-left: 2em;\'> > '+result+' </div>');
-        $("#screen").scrollTop($('#screen')[0].scrollHeight);
+        $("#display").append('<div style=\'margin-left: 2em;\'> > '+result+' </div>');
+        $("#display").scrollTop($('#display')[0].scrollHeight);
     }
 
     function calcul(commande){
@@ -128,7 +128,7 @@ $(document).ready(function(){
     }
 
     function clear(){
-        $('#screen').children().remove();
+        $('#display').children().remove();
     }
 
     function date(){
