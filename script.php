@@ -14,8 +14,11 @@ if(isset($_POST['commande']) && $_POST['commande'] != ''){
     echo json_encode(array("key" => $_SESSION['commandes'], 'current' => getcwd()));
 }
 
-if(isset($_POST['logout']) && $_POST['logout'] == 'true'){
+if(isset($_GET['logout']) && $_GET['logout'] == 'true'){
+    session_unset();
     session_destroy();
+    header("HTTP1/1 200");
+    echo json_encode(array("key" => 'test'));
 }
 
 if(isset($_GET['date']) && $_GET['date'] == "true"){
@@ -36,23 +39,30 @@ if(isset($_GET['free']) && $_GET['free'] == "true"){
 }
 
 if(isset($_POST['cd']) && $_POST['cd'] == "true"){
-    if($_POST['path'] == '../'){
-        $items = explode('\\',$_SESSION['currentFolder'].'/'.$_POST['path']);
-        foreach($items as $item){
-            if($item != 'TPjQuery'){
+    // if($_POST['path'] == '../'){
+    //     $items = explode('\\',$_SESSION['currentFolder'].'/'.$_POST['path']);
+    //     foreach($items as $item){
+    //         if($item != 'TPjQuery'){
                 
-            }
+    //         }
+    //     }
+    // }
+    if($_POST['path'] == ''){
+        $directory = $_SESSION['currentFolder'];
+        $cd = true;
+    }
+
+    if($_POST['path'] != ''){
+        if(is_dir($_SESSION['currentFolder'].'/'.$_POST['path'])){
+            $directory = $_SESSION['currentFolder'] = getcwd().'/'.$_POST['path'];
+            $cd = true;
+        }else{
+            $directory = '';
+            $cd = false;
         }
     }
-    if(is_dir($_POST['path']) && $_POST['path'] != '../'){
-        $directory = $_SESSION['currentFolder'] = getcwd().'/'.$_POST['path'];
-        $cd = true;
-    }else{
-        $directory = '';
-        $cd = false;
-    }
     header("HTTP1/1 200");
-    echo json_encode(array("cd" => $cd, "key" => $directory, 'back' => $items));
+    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder']/*, 'back' => $items*/));
 }
 
 if(isset($_POST['ls']) && $_POST['ls'] == "true"){

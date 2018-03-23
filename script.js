@@ -22,17 +22,18 @@ $(document).ready(function(){
             if(commande.match(/^exit$/gi) != null){
                 $("#input").attr('disabled', 'true');
                 display('logout');
-                    $.ajax({
-                        url: 'script.php',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: {'logout' : 'true'},
-                        success: function(data, statut){
-                        },
-                        error: function(data, statut, error){
-                            console.log(data);
-                        }
-                    });
+                $.ajax({
+                    url: 'script.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {'logout' : 'true'},
+                    success: function(data, statut){
+                        console.log(data.key)
+                    },
+                    error: function(data, statut, error){
+                        console.log(data);
+                    }
+                });
             }
 
             if(commande.match(/^date$/gi) != null){
@@ -45,10 +46,6 @@ $(document).ready(function(){
 
             if(commande.match(/^free$/gi) != null){
                 free();
-            }
-
-            if(commande.match(/^cd dossier$/gi) != null){
-                cd(commande);
             }
 
             if(commande.match(/^cd/gi) != null){
@@ -82,6 +79,10 @@ $(document).ready(function(){
             if(commande.match(/^man$/gi) != null){
                 listcmd();
             }
+
+            if(commande.match(/^pwd$/gi) != null){
+                cd();
+            }
             
             $("#input").val('');
         }
@@ -99,7 +100,6 @@ $(document).ready(function(){
                 data: {"commande": listCommandes},
                 success: function(data, statut){
                     console.log('commandes : ',data.key);
-                    console.log('currentfolder :', data.current)
                     if(display){
                         for(var i = 0 ; i < data.key.length ; i++){
                             $("#screen").append('<div> > '+data.key[i]+' </div>');
@@ -107,7 +107,7 @@ $(document).ready(function(){
                     }
                 },
                 error: function(data, statut, error){
-                    alert(error);
+                    console.log(data);
                 }
             });
         }
@@ -178,9 +178,11 @@ $(document).ready(function(){
 
     function cd(commande){
         path = '';
-        for(var i = 2 ; i < commande.length ; i++){
-            if(commande[i] != ' '){
-                path = path + commande[i];
+        if(commande != undefined){
+            for(var i = 2 ; i < commande.length ; i++){
+                if(commande[i] != ' '){
+                    path = path + commande[i];
+                }
             }
         }
 
@@ -190,7 +192,6 @@ $(document).ready(function(){
             dataType: 'json',
             data: {'cd' : 'true', 'path': path},
             success: function(data, statut){
-                console.log('back',data.back)
                 if(data.cd){
                     display(data.key);
                 }else{
@@ -334,7 +335,7 @@ $(document).ready(function(){
     var man = [
         {"nomCommande" : "calcul", "action" : "effectue un calcul"},
         {"nomCommande" : "clear", "action" : "efface l'invite de commande"},
-        {"nomCommande" : "exit", "action" : "désactive le champ input de saisie et affiche 'logout'"},
+        {"nomCommande" : "exit", "action" : "désactive le champ input de saisie et affiche 'logout' ; permet également de 'kill' la session et de retourner dans le dossier racine"},
         {"nomCommande" : "date", "action" : "affiche la date et l'heure actuelle"},
         {"nomCommande" : "version", "action" : "affiche la version de php utilisé sur le serveur"},
         {"nomCommande" : "free", "action" : "affiche l'espace disque (en GB) disponible sur le serveur"},
