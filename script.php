@@ -39,20 +39,27 @@ if(isset($_GET['free']) && $_GET['free'] == "true"){
 }
 
 if(isset($_POST['cd']) && $_POST['cd'] == "true"){
-    // if($_POST['path'] == '../'){
-    //     $items = explode('\\',$_SESSION['currentFolder'].'/'.$_POST['path']);
-    //     foreach($items as $item){
-    //         if($item != 'TPjQuery'){
-                
-    //         }
-    //     }
-    // }
-    if($_POST['path'] == ''){
-        $directory = $_SESSION['currentFolder'];
+    $back ='';
+    if($_POST['path'] == '../'){
         $cd = true;
+        $items = explode('\\',$_SESSION['currentFolder']);
+        foreach($items as $item){
+            $lastitem = $item;
+        }
+        if($lastitem != 'TPjQuery'){
+            $lastitems = explode('/', $lastitem);
+            $i = 0;
+            foreach($lastitems as $item){
+                $endurl = $item;
+                $i++;
+            }
+            $url = $lastitems[$i-1];
+            $back = explode($url, $_SESSION['currentFolder']);
+            $_SESSION['currentFolder'] = $back[0];
+        }
     }
 
-    if($_POST['path'] != ''){
+    if($_POST['path'] != '' && $_POST['path'] != '../'){
         if(is_dir($_SESSION['currentFolder'].'/'.$_POST['path'])){
             $directory = $_SESSION['currentFolder'] = getcwd().'/'.$_POST['path'];
             $cd = true;
@@ -62,7 +69,7 @@ if(isset($_POST['cd']) && $_POST['cd'] == "true"){
         }
     }
     header("HTTP1/1 200");
-    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder']/*, 'back' => $items*/));
+    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder'], 'back' => $back));
 }
 
 if(isset($_POST['ls']) && $_POST['ls'] == "true"){
