@@ -98,10 +98,12 @@ $(document).ready(function(){
                 dataType: 'json',
                 data: {"commande": listCommandes},
                 success: function(data, statut){
-                    console.log('commandes : ',data.key);
                     if(display){
+                        console.log('test');
+                        console.log(data.key);
                         for(var i = 0 ; i < data.key.length ; i++){
-                            $("#screen").append('<div> > '+data.key[i]+' </div>');
+                            console.log('test2')
+                            $("#display").append('<div style=\'margin-left: 2em;\'> > '+data.key[i]+' </div>');
                         }
                     }
                 },
@@ -193,6 +195,7 @@ $(document).ready(function(){
             data: {'cd' : 'true', 'path': path},
             success: function(data, statut){
                 if(data.cd){
+                    console.log('url', data.back);
                     display(data.key);
                 }else{
                     display('no such file directory');
@@ -294,6 +297,7 @@ $(document).ready(function(){
     }
 
     function history(){
+        console.log('history');
         $.ajax({
             url: 'script.php',
             type: 'POST',

@@ -40,25 +40,25 @@ if(isset($_GET['free']) && $_GET['free'] == "true"){
 
 if(isset($_POST['cd']) && $_POST['cd'] == "true"){
     $back ='';
-    $url='';
+    $elements='';
+    $myurl = array();
+    $myurl[0] = '';
     if($_POST['path'] == '../'){
-        $cd = true;
-        $items = explode('\\',$_SESSION['currentFolder']);
-        foreach($items as $item){
-            $lastitem = $item;
+        $cd =true;
+        $elements = explode('/', $_SESSION['currentFolder']);
+        $i=0;
+        foreach($elements as $element){
+            $i++;
         }
-        if($lastitem != 'TPjQuery'){
-            $lastitems = explode('/', $lastitem);
-            $i = 0;
-            foreach($lastitems as $item){
-                $endurl = $item;
-                $i++;
-            }
-            $url = $lastitems[$i-1];
-            $back = explode($url, $_SESSION['currentFolder']);
-            $_SESSION['currentFolder'] = $back[0];
+        $element = $elements[$i-1];
+        $myurl = explode($element, $_SESSION['currentFolder']);
+        $myurl2 = explode('/', $myurl[0]);
+        $j=-1;
+        foreach($myurl2 as $url){
+            $j++;
         }
-    }   
+        $_SESSION['currentFolder'] = $myurl2[$j-1];
+    }
 
 
     if($_POST['cd'] == 'true' && $_POST['path'] == ''){
@@ -75,7 +75,7 @@ if(isset($_POST['cd']) && $_POST['cd'] == "true"){
         }
     }
     header("HTTP1/1 200");
-    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder'], 'back' => $url));
+    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder'], 'back' => $myurl));
 }
 
 if(isset($_POST['ls']) && $_POST['ls'] == "true"){
