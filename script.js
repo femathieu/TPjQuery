@@ -2,12 +2,11 @@ $(document).ready(function(){
     var listCommandes = [];
     $("#input").keypress(function(e) {
         if(e.which == 13) {
-            display()
+            
             var commande = $("#input").val();
 
             memorizeCommande(commande);
 
-            console.log('commande : ', commande);
             $('#display').append('<div style=\'color: red;\'>'+commande+'</div>');
 
             if(commande.match(/[=]/gi) != null){
