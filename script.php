@@ -59,9 +59,13 @@ if(isset($_POST['cd']) && $_POST['cd'] == "true"){
         }
     }
 
+    if($_POST['cd'] == 'true' && $_POST['path'] == ''){
+        $cd = true;
+    }
+
     if($_POST['path'] != '' && $_POST['path'] != '../'){
         if(is_dir($_SESSION['currentFolder'].'/'.$_POST['path'])){
-            $directory = $_SESSION['currentFolder'] = getcwd().'/'.$_POST['path'];
+            $_SESSION['currentFolder'] = $_SESSION['currentFolder'].'/'.$_POST['path'];
             $cd = true;
         }else{
             $directory = '';
