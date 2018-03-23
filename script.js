@@ -340,7 +340,7 @@ $(document).ready(function(){
         {"nomCommande" : "date", "action" : "affiche la date et l'heure actuelle"},
         {"nomCommande" : "version", "action" : "affiche la version de php utilisé sur le serveur"},
         {"nomCommande" : "free", "action" : "affiche l'espace disque (en GB) disponible sur le serveur"},
-        {"nomCommande" : "cd dossier", "action" : "indique le dossier courant"},
+        {"nomCommande" : "cd [nom_dossier]", "action" : "se déplace dans le dossier indiquer"},
         {"nomCommande" : "ls", "action" : "liste les dossiers et fichiers présent dans le dossier courant"},
         {"nomCommande" : "mkdir [nom_dossier]", "action" : "créer un dossier"},
         {"nomCommande" : "rmdir [nom_dossier]", "action" : "efface un dossier"},
