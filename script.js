@@ -84,6 +84,8 @@ $(document).ready(function(){
             }
             
             $("#input").val('');
+
+            display();
         }
     });
 
@@ -115,8 +117,12 @@ $(document).ready(function(){
     }
 
     function display(result){
-        $("#display").append('<div style=\'margin-left: 2em;\'> > '+result+' </div>');
-        $("#display").scrollTop($('#display')[0].scrollHeight);
+        if(result == undefined){
+            $("#display").scrollTop($('#display')[0].scrollHeight);
+        }else{
+            $("#display").append('<div style=\'margin-left: 2em;\'> > '+result+' </div>');
+            $("#display").scrollTop($('#display')[0].scrollHeight);
+        }
     }
 
     function calcul(commande){
@@ -344,6 +350,7 @@ $(document).ready(function(){
         {"nomCommande" : "version", "action" : "affiche la version de php utilisé sur le serveur"},
         {"nomCommande" : "free", "action" : "affiche l'espace disque (en GB) disponible sur le serveur"},
         {"nomCommande" : "cd [nom_dossier]", "action" : "se déplace dans le dossier indiquer"},
+        {"nomCommande" : "cd ..", "action" : "remonte d'un dossier"},
         {"nomCommande" : "ls", "action" : "liste les dossiers et fichiers présent dans le dossier courant"},
         {"nomCommande" : "mkdir [nom_dossier]", "action" : "créer un dossier"},
         {"nomCommande" : "rmdir [nom_dossier]", "action" : "efface un dossier"},

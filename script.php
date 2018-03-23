@@ -43,21 +43,26 @@ if(isset($_POST['cd']) && $_POST['cd'] == "true"){
     $elements='';
     $myurl = array();
     $myurl[0] = '';
-    if($_POST['path'] == '../'){
-        $cd =true;
-        $elements = explode('/', $_SESSION['currentFolder']);
-        $i=0;
-        foreach($elements as $element){
-            $i++;
+    $new_path = '';
+    $path = explode('\\', $_SESSION['currentFolder']);
+    if ($_POST['path'] == ".." ) {
+        $cd = true;
+        if (!(sizeof($path) == 1)) {
+          unset($path[sizeof($path) - 1]);
+          $new_path = "";
+          $first = true;
+          foreach ($path as $tmp_folder) {
+            if ($first) {
+              $new_path .= $tmp_folder;
+              $first = false;
+            } else {
+              $new_path .= "\\".$tmp_folder;
+            }
+          }
+        } else {
+          $new_path = $path;
         }
-        $element = $elements[$i-1];
-        $myurl = explode($element, $_SESSION['currentFolder']);
-        $myurl2 = explode('/', $myurl[0]);
-        $j=-1;
-        foreach($myurl2 as $url){
-            $j++;
-        }
-        $_SESSION['currentFolder'] = $myurl2[$j-1];
+        $_SESSION['currentFolder'] = $new_path;
     }
 
 
@@ -65,9 +70,9 @@ if(isset($_POST['cd']) && $_POST['cd'] == "true"){
         $cd = true;
     }
 
-    if($_POST['path'] != '' && $_POST['path'] != '../'){
-        if(is_dir($_SESSION['currentFolder'].'/'.$_POST['path'])){
-            $_SESSION['currentFolder'] = $_SESSION['currentFolder'].'/'.$_POST['path'];
+    if($_POST['path'] != '' && $_POST['path'] != '..'){
+        if(is_dir($_SESSION['currentFolder'].'\\'.$_POST['path'])){
+            $_SESSION['currentFolder'] = $_SESSION['currentFolder'].'\\'.$_POST['path'];
             $cd = true;
         }else{
             $directory = '';
@@ -75,7 +80,7 @@ if(isset($_POST['cd']) && $_POST['cd'] == "true"){
         }
     }
     header("HTTP1/1 200");
-    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder'], 'back' => $myurl));
+    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder'], 'back' => $new_path));
 }
 
 if(isset($_POST['ls']) && $_POST['ls'] == "true"){
@@ -97,9 +102,9 @@ if(isset($_POST['ls']) && $_POST['ls'] == "true"){
 
 if(isset($_POST['mkdir']) && $_POST['mkdir'] == 'true'){
     header("HTTP1/1 200");
-    if(!is_dir($_SESSION['currentFolder'].'/'.$_POST['foldername'])){
+    if(!is_dir($_SESSION['currentFolder'].'\\'.$_POST['foldername'])){
         $add = true;
-        mkdir($_SESSION['currentFolder'].'/'.$_POST['foldername'], 0700, true);
+        mkdir($_SESSION['currentFolder'].'\\'.$_POST['foldername'], 0700, true);
     }else{
         $add = false;
     }
@@ -108,8 +113,8 @@ if(isset($_POST['mkdir']) && $_POST['mkdir'] == 'true'){
 
 if(isset($_POST['rmdir']) && $_POST['rmdir'] == 'true'){
     header("HTTP1/1 200");
-    if(is_dir($_SESSION['currentFolder'].'/'.$_POST['path'])){
-        rmdir($_SESSION['currentFolder'].'/'.$_POST['path']);
+    if(is_dir($_SESSION['currentFolder'].'\\'.$_POST['path'])){
+        rmdir($_SESSION['currentFolder'].'\\'.$_POST['path']);
         $delete = true;
     }else{
         $delete = false;
