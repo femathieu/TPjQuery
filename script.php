@@ -40,6 +40,7 @@ if(isset($_GET['free']) && $_GET['free'] == "true"){
 
 if(isset($_POST['cd']) && $_POST['cd'] == "true"){
     $back ='';
+    $url='';
     if($_POST['path'] == '../'){
         $cd = true;
         $items = explode('\\',$_SESSION['currentFolder']);
@@ -57,7 +58,8 @@ if(isset($_POST['cd']) && $_POST['cd'] == "true"){
             $back = explode($url, $_SESSION['currentFolder']);
             $_SESSION['currentFolder'] = $back[0];
         }
-    }
+    }   
+
 
     if($_POST['cd'] == 'true' && $_POST['path'] == ''){
         $cd = true;
@@ -73,7 +75,7 @@ if(isset($_POST['cd']) && $_POST['cd'] == "true"){
         }
     }
     header("HTTP1/1 200");
-    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder'], 'back' => $back));
+    echo json_encode(array("cd" => $cd, "key" => $_SESSION['currentFolder'], 'back' => $url));
 }
 
 if(isset($_POST['ls']) && $_POST['ls'] == "true"){
